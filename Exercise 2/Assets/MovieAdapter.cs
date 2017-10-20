@@ -6,7 +6,7 @@ using Android.Views;
 using System.Collections.Generic;
 using static Android.Views.ViewGroup;
 
-namespace Fixster.Droid
+namespace Flixster.Droid
 {
     internal class MovieAdapter : BaseAdapter<Movie>
     {

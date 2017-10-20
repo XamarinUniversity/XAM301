@@ -9,9 +9,9 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-[assembly: global::Android.Runtime.ResourceDesignerAttribute("Fixster.Droid.Resource", IsApplication=true)]
+[assembly: global::Android.Runtime.ResourceDesignerAttribute("Flixster.Droid.Resource", IsApplication=true)]
 
-namespace Fixster.Droid
+namespace Flixster.Droid
 {
 	
 	
@@ -37,6 +37,25 @@ namespace Fixster.Droid
 			}
 			
 			private Attribute()
+			{
+			}
+		}
+		
+		public partial class Id
+		{
+			
+			// aapt resource value: 0x7f040001
+			public const int movieList = 2130968577;
+			
+			// aapt resource value: 0x7f040000
+			public const int searchView = 2130968576;
+			
+			static Id()
+			{
+				global::Android.Runtime.ResourceIdManager.UpdateIdValues();
+			}
+			
+			private Id()
 			{
 			}
 		}

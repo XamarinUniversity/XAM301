@@ -5,12 +5,12 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{48DBB410-CB43-49CA-865D-2AFF8EBAC0DB}</ProjectGuid>
+    <ProjectGuid>{0E637B10-FF32-4057-A0DC-1F6819EF64A5}</ProjectGuid>
     <ProjectTypeGuids>{EFBA0AD7-5A72-4C68-AF49-83D382785DCF};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Fixster.Droid</RootNamespace>
-    <AssemblyName>Fixster.Droid</AssemblyName>
+    <RootNamespace>Flixster.Droid</RootNamespace>
+    <AssemblyName>Flixster.Droid</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <AndroidApplication>True</AndroidApplication>
     <AndroidResgenFile>Resources\Resource.Designer.cs</AndroidResgenFile>
@@ -60,7 +60,6 @@
     <Reference Include="Mono.Android" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IMoviePresenter.cs" />
     <Compile Include="MainActivity.cs" />
     <Compile Include="MovieAdapter.cs" />
     <Compile Include="MoviePresenter.cs" />
@@ -90,7 +89,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Flixster.Data\Flixster.Data.csproj">
-      <Project>{82b6a9dc-1a88-4e65-98cd-2cdf6e704317}</Project>
+      <Project>{7b36dc03-406b-4f09-b9ec-59d7aaabfe1f}</Project>
       <Name>Flixster.Data</Name>
     </ProjectReference>
   </ItemGroup>
