@@ -9,7 +9,7 @@ using System.Net;
 
 namespace Flixster.Data
 {
-    public class Result
+    internal class Result
     {
         [JsonProperty("wrapperType")]
         public string WrapperType { get; set; }
@@ -123,7 +123,7 @@ namespace Flixster.Data
         public string ShortDescription { get; set; }
     }
 
-    public class MovieSearchResponse
+    internal class MovieSearchResponse
     {
         [JsonProperty("resultCount")]
         public int ResultCount { get; set; }
