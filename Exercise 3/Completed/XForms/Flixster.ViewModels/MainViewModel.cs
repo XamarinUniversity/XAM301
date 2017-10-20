@@ -11,26 +11,24 @@ namespace Flixster.ViewModels
 {
     public class MainViewModel : INotifyPropertyChanged
     {
-        private string searchTerm;
-        private CancellationTokenSource cts;
-        private IReadOnlyList<Movie> _movies;
-
         public event PropertyChangedEventHandler PropertyChanged;
+        private void RaisePropertyChanged([CallerMemberName] string propertyName = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        private IReadOnlyList<Movie> _movies;
         public IReadOnlyList<Movie> Movies
         {
             get => _movies;
             private set
             {
                 _movies = value;
-                RaisePropertyChanged();
+                RaisePropertyChanged(nameof(Movies));
             }
         }
 
-        private void RaisePropertyChanged([CallerMemberName] string propertyName = "")
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
+        private string searchTerm;
         public string SearchTerm
         {
             get => searchTerm;
@@ -39,42 +37,39 @@ namespace Flixster.ViewModels
                 if (searchTerm != value)
                 {
                     searchTerm = value;
-                    RaisePropertyChanged();
-                    OnSearchTermChanged();
+                    RaisePropertyChanged(); // use the [CallerMemberName] support
+                    OnSearchTermChangedAsync(searchTerm)
+                        .ContinueWith(tr => throw new Exception("Search Failed.", tr.Exception),
+                        TaskContinuationOptions.OnlyOnFaulted);
                 }
             }
         }
 
-        private void OnSearchTermChanged()
+        private CancellationTokenSource cts;
+        private async Task OnSearchTermChangedAsync(string searchTerm)
         {
-            if (cts != null)
-            {
-                cts.Cancel();
-                cts = null;
-            }
+            cts?.Cancel();
 
             if (!string.IsNullOrEmpty(searchTerm))
             {
-                var myCts = cts = new CancellationTokenSource();
+                var innerToken = cts = new CancellationTokenSource();
 
                 var movieService = new MovieService();
-                var movies = movieService.GetMoviesForSearchAsync(searchTerm)
-                    .ContinueWith(tr => {
-
-                        if (!myCts.IsCancellationRequested)
-                        {
-                            Movies = tr.Result;
-                        }
-
-                    }, myCts.Token,
-                        TaskContinuationOptions.OnlyOnRanToCompletion,
-                        TaskScheduler.FromCurrentSynchronizationContext());
+                var movies = await movieService.GetMoviesForSearchAsync(searchTerm);
+                if (!innerToken.IsCancellationRequested)
+                {
+                    Movies = movies;
+                }
+            }
+            else
+            {
+                Movies = null;
             }
         }
 
         public MainViewModel()
         {
-            Movies = new ObservableCollection<Movie>();
+            //OnSearchTermChangedAsync("Star Wars");
         }
     }
 }

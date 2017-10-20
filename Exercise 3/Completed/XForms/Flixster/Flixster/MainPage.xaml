@@ -2,6 +2,7 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:Flixster"
+             xmlns:model="clr-namespace:Flixster.Data;assembly=Flixster.Data"
              Title="Flixster"
              x:Class="Flixster.MainPage">
     <ContentPage.Content>
@@ -9,7 +10,7 @@
             <SearchBar Placeholder="Title or Keyword" Text="{Binding SearchTerm, Mode=TwoWay}" />
             <ListView ItemsSource="{Binding Movies}">
                 <ListView.ItemTemplate>
-                    <DataTemplate>
+                    <DataTemplate x:DataType="model:Movie">
                         <TextCell Text="{Binding Title}" Detail="{Binding Description}" />
                     </DataTemplate>
                 </ListView.ItemTemplate>
