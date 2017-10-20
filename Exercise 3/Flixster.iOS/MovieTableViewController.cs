@@ -1,18 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using Flixster.Data;
 using Foundation;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using UIKit;
-using Flixster.Data;
 
 namespace Flixster
 {
-    public class MovieTableViewController : UITableViewController, IUISearchResultsUpdating
+    public partial class MovieTableViewController : UITableViewController, IUISearchResultsUpdating
     {
         private UISearchController searchController;
         private NSString CellId = new NSString("MovieCell");
         private IReadOnlyList<Movie> movies;
+
+        public MovieTableViewController(IntPtr handle) : base(handle)
+        {
+        }
 
         public override void ViewDidLoad()
         {
@@ -20,18 +23,30 @@ namespace Flixster
 
             searchController = new UISearchController(searchResultsController: null)
             {
-                SearchResultsUpdater = this,
                 HidesNavigationBarDuringPresentation = false,
-                ObscuresBackgroundDuringPresentation = false
+                ObscuresBackgroundDuringPresentation = false,
+                SearchResultsUpdater = this,
             };
 
             searchController.SearchBar.Placeholder = "Search Movies";
             TableView.TableHeaderView = searchController.SearchBar;
+
+            //await UpdateMovieListings("Star Wars");
         }
 
-        public override nint NumberOfSections(UITableView tableView)
+        private async Task UpdateMovieListings(string searchTerm)
         {
-            return 1;
+            if (!string.IsNullOrEmpty(searchTerm))
+            {
+                var movieService = new MovieService();
+                movies = await movieService.GetMoviesForSearchAsync(searchTerm);
+            }
+            else
+            {
+                movies = null;
+            }
+
+            TableView.ReloadData();
         }
 
         public override nint RowsInSection(UITableView tableView, nint section)
@@ -57,17 +72,7 @@ namespace Flixster
         public async void UpdateSearchResultsForSearchController(UISearchController searchController)
         {
             var searchTerm = searchController.SearchBar.Text;
-            if (!string.IsNullOrEmpty(searchTerm))
-            {
-                var movieService = new MovieService();
-                movies = await movieService.GetMoviesForSearchAsync(searchTerm);
-            }
-            else
-            {
-                movies = null;
-            }
-
-            TableView.ReloadData();
+            await UpdateMovieListings(searchTerm);
         }
     }
 }
