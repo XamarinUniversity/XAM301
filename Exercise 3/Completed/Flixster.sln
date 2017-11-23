@@ -3,30 +3,30 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27004.2002
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flixster.iOS", "Flixster.iOS\Flixster.iOS.csproj", "{D5FAD3A5-78E4-456D-8F96-65B9C5A0DAED}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuickFlicks.iOS", "QuickFlicks.iOS\QuickFlicks.iOS.csproj", "{D5FAD3A5-78E4-456D-8F96-65B9C5A0DAED}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Flixster.Data", "Flixster.Data\Flixster.Data.csproj", "{82B6A9DC-1A88-4E65-98CD-2CDF6E704317}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuickFlicks.Data", "QuickFlicks.Data\QuickFlicks.Data.csproj", "{82B6A9DC-1A88-4E65-98CD-2CDF6E704317}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "XForms", "XForms", "{74FC5797-F874-4ED1-8113-FFA0C5E86267}"
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Flixster", "XForms\Flixster\Flixster\Flixster.shproj", "{FA4D0313-B7E0-48AD-927B-F7E5AE53D340}"
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "QuickFlicks", "XForms\QuickFlicks\QuickFlicks\QuickFlicks.shproj", "{FA4D0313-B7E0-48AD-927B-F7E5AE53D340}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flixster.Android", "XForms\Flixster\Flixster.Android\Flixster.Android.csproj", "{EAA4F4D3-7827-439C-826A-C26C24CD08F2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuickFlicks.Android", "XForms\QuickFlicks\QuickFlicks.Android\QuickFlicks.Android.csproj", "{EAA4F4D3-7827-439C-826A-C26C24CD08F2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flixster.iOS", "XForms\Flixster\Flixster.iOS\Flixster.iOS.csproj", "{FBE6AC5C-7D84-4EFC-9DD7-71CC0E80BAB7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuickFlicks.iOS", "XForms\QuickFlicks\QuickFlicks.iOS\QuickFlicks.iOS.csproj", "{FBE6AC5C-7D84-4EFC-9DD7-71CC0E80BAB7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flixster.UWP", "XForms\Flixster\Flixster.UWP\Flixster.UWP.csproj", "{EBE5F202-EBF7-4303-9EC9-E9ECA831CB84}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuickFlicks.UWP", "XForms\QuickFlicks\QuickFlicks.UWP\QuickFlicks.UWP.csproj", "{EBE5F202-EBF7-4303-9EC9-E9ECA831CB84}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Flixster.ViewModels", "XForms\Flixster.ViewModels\Flixster.ViewModels.csproj", "{457A27A7-C194-4EFF-81D9-FEB98837F38A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuickFlicks.ViewModels", "XForms\QuickFlicks.ViewModels\QuickFlicks.ViewModels.csproj", "{457A27A7-C194-4EFF-81D9-FEB98837F38A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flixster.Droid", "Flixster.Droid\Flixster.Droid.csproj", "{0E637B10-FF32-4057-A0DC-1F6819EF64A5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuickFlicks.Droid", "QuickFlicks.Droid\QuickFlicks.Droid.csproj", "{0E637B10-FF32-4057-A0DC-1F6819EF64A5}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		XForms\Flixster\Flixster\Flixster.projitems*{eaa4f4d3-7827-439c-826a-c26c24cd08f2}*SharedItemsImports = 4
-		XForms\Flixster\Flixster\Flixster.projitems*{ebe5f202-ebf7-4303-9ec9-e9eca831cb84}*SharedItemsImports = 4
-		XForms\Flixster\Flixster\Flixster.projitems*{fa4d0313-b7e0-48ad-927b-f7e5ae53d340}*SharedItemsImports = 13
-		XForms\Flixster\Flixster\Flixster.projitems*{fbe6ac5c-7d84-4efc-9dd7-71cc0e80bab7}*SharedItemsImports = 4
+		XForms\QuickFlicks\QuickFlicks\QuickFlicks.projitems*{eaa4f4d3-7827-439c-826a-c26c24cd08f2}*SharedItemsImports = 4
+		XForms\QuickFlicks\QuickFlicks\QuickFlicks.projitems*{ebe5f202-ebf7-4303-9ec9-e9eca831cb84}*SharedItemsImports = 4
+		XForms\QuickFlicks\QuickFlicks\QuickFlicks.projitems*{fa4d0313-b7e0-48ad-927b-f7e5ae53d340}*SharedItemsImports = 13
+		XForms\QuickFlicks\QuickFlicks\QuickFlicks.projitems*{fbe6ac5c-7d84-4efc-9dd7-71cc0e80bab7}*SharedItemsImports = 4
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Ad-Hoc|Any CPU = Ad-Hoc|Any CPU
