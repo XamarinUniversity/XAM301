@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+    <title>Exercise 3: Respond to drawer-menu selection to update your UI (XAM301)</title>
+    <link rel="stylesheet" type="text/css" href="./res/styles/normalize.css">
+    <link rel="stylesheet" type="text/css" href="./res/styles/prettify.css" />
+    <link rel="stylesheet" type="text/css" href="./res/styles/styles.css">
+</head>
+
+<body>
+    <!-- Use the same title as the StartHere -->
+    <header>XAM301 Mobile application architecture</header>
+
+    <section id="main">
+        <h2>Exercise 3: Respond to drawer-menu selection to update your UI (XAM301)</h2>
+<p>This exercise walks you through building a new Xamarin.Forms application using the <strong>Model-View-ViewModel</strong> application style.</p>
+<figure class="figure">
+<img src="./images/ex3-completed.png" alt="Screenshot of the completed exercise on UWP." class="exercise bordered" title="Completed exercise" />
+<figcaption class="figure-caption">Completed exercise</figcaption>
+</figure>
+<blockquote class="info-quote">To complete the exercise, you will need <a href="https://www.visualstudio.com/" target="_blank">Visual Studio for Windows or macOS</a> with the <a href="https://visualstudio.microsoft.com/xamarin/" target="_blank">Xamarin development tools</a> installed. You will also need either an emulator/simulator or a device to run the exercise on. Please see the <a href="https://docs.microsoft.com/xamarin/cross-platform/get-started/installation/" target="_blank">setup page</a> if you need help installing the Xamarin development environment.
+</blockquote>
+
+<hr>
+<h2>Create a new Xamarin.Forms project</h2>
+<p>You're going to add a final version of your QuickFlicks app into the mix in the form of a Xamarin.Forms application. As before, you can either add the set of projects to your existing solution, or you can create a new solution.</p>
+<blockquote class="info-quote"><strong>Note</strong> If you decide to stick with a single solution, it's useful to separate out the projects by creating a Solution Folder (the completed lab uses the name &quot;XForms&quot;) and creating the Xamarin.Forms projects in that folder - this will avoid name collisions with the native UI apps you've already created.
+</blockquote>
+<ide name="xs">
+<p>Create a new project using Visual Studio for Mac:</p>
+<ol>
+<li>Launch <strong>Visual Studio</strong> for Mac.</li>
+<li>Select <strong>File</strong> &gt; <strong>New Solution</strong> or right-click on the Solution node and select <strong>Add</strong> &gt; <strong>Add New Project</strong>.</li>
+<li>Locate the <strong>Multiplatform</strong> &gt; <strong>App</strong> category.</li>
+<li>Choose the <strong>Blank Forms App</strong> template.</li>
+</ol>
+</ide>
+<ide name="vs">
+<p>Create a new project using Visual Studio for Windows:</p>
+<ol>
+<li>Launch <strong>Visual Studio</strong> for Windows.</li>
+<li>Select <strong>File</strong> &gt; <strong>New</strong> &gt; <strong>Project</strong>.</li>
+<li>Locate the <strong>Visual C#</strong> &gt; <strong>Cross-Platform</strong> category.</li>
+<li>Choose the <strong>Cross-Platform App (Xamarin)</strong> template.</li>
+</ol>
+</ide>
+
+<hr>
+<h2>Choose your project name and location</h2>
+<ide name="xs">
+<ol>
+<li>Name the app <strong>QuickFlicks</strong> - the templates will generate multiple projects with different suffixes.</li>
+<li>The completed lab will use the Shared Library option, but you can use either PCL or Shared Library.</li>
+<li>Make sure the &quot;Use XAML for the user interface files&quot; is checked and Click <strong>Next</strong>.</li>
+<li>Choose a location for the project.</li>
+<li>Use the default values for all other project settings.</li>
+<li>Click <strong>Create</strong>.</li>
+</ol>
+</ide>
+<ide name="vs">
+<ol>
+<li>Name the app <strong>QuickFlicks</strong> - the templates will generate multiple projects with different suffixes.</li>
+<li>Choose a location for the project.</li>
+<li>Change the <strong>Solution</strong> option to &quot;Add to Solution&quot; if you want to add the project to your existing solution.</li>
+<li>Click <strong>OK</strong> to move to the options screen.</li>
+<li>Select &quot;Blank App&quot; from the template choices.</li>
+<li>Make sure &quot;Xamarin.Forms&quot; is selected.</li>
+<li>The completed lab will use the Shared Library option, but you can use either PCL or Shared Library.</li>
+<li>Click <strong>OK</strong>.</li>
+</ol>
+<blockquote>
+If you are on Windows 10, you will get a prompt about the Windows 10 API version you want to target. Generally, you should just take the default options presented unless you have a specific requirement to meet.
+</blockquote>
+</ide>
+
+<hr>
+<h2>Explore the Xamarin.Forms projects</h2>
+<p>The Xamarin.Forms template always creates multiple projects - one for each native UI platform you'll be targeting, and one for the shared UI representation will describe using Xamarin.Forms. As mentioned, depending on your environment, you might not have all the projects listed here.</p>
+<p>If you are not familiar with Xamarin.Forms, you've got quite a few courses to help you pick it up. Start with <a href="https://university.xamarin.com/classes#xam120-intro-to-xamarinforms" target="_blank">XAM120 - Intro to Xamarin.Forms</a>.</p>
+<table class="table table-striped">
+<thead>
+<tr>
+	<th>Project</th>
+	<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+	<td><strong>QuickFlicks</strong></td>
+	<td>This the shared UI which is described in XAML. All the native platform-specific projects must have a reference to this project.</td>
+</tr>
+<tr>
+	<td><strong>QuickFlicks.iOS</strong></td>
+	<td>The native iOS app bundle that runs your app in iOS. This generates a real iOS native binary, with native UI created from the shared UI defined in the XAML project.</td>
+</tr>
+<tr>
+	<td><strong>QuickFlicks.Droid</strong></td>
+	<td>The native Android app package that runs your app in iOS. This generates a native binary for Android, with native UI created from the shared UI defined in the XAML project.</td>
+</tr>
+<tr>
+	<td><strong>QuickFlicks.UWP</strong></td>
+	<td>The native UWP app package that runs your app on the various UWP platforms. This generates a real Windows binary, with native UI created from the shared UI defined in the XAML project.</td>
+</tr>
+</tbody>
+</table>
+
+<hr>
+<h2>Update the NuGet packages (OPTIONAL)</h2>
+<p>Unlike your native UI projects, the Xamarin.Forms projects have quite a few external NuGet dependencies. When starting a new project, it's a good idea to update those packages to the latest stable releases. This is optional, feel free to skip this if you are low on time for the lab exercise.</p>
+<ide name="xs">
+<ol>
+<li>Right-click on the Solution node (root) in the Solution Explorer and select &quot;Update NuGet packages&quot; to update all of the requirements at once.</li>
+<li>Alternatively, you can update the NuGet references on a per-project basis, just make sure you keep them all synchronized and on the same versions, particularly the <strong>Xamarin.Forms</strong> package!</li>
+</ol>
+</ide>
+<ide name="vs">
+<ol>
+<li>Right-click on the Solution node (root) in the Solution Explorer and select &quot;Manage NuGet Packages for Solution...&quot;</li>
+<li>In the NuGet dialog, select the <strong>Updates</strong> tab.</li>
+<li>
+Start with Xamarin.Forms, if there's an update available, apply that one (and only that one) first to all projects in your solution. You can do this by checking the box next to the Xamarin.Forms package, Then checking all packages on the right hand side and clicking <strong>Install</strong>, or <strong>Update</strong> (both buttons will do the same thing in this case).
+</li>
+<li>
+This will often update many of the other packages, which is why you start here. Once it's finished, update the <strong>Xamarin.Android.Support.v4</strong> package if there's an update available. This will also upgrade most of the Android support packages since they are dependencies.
+</li>
+<li>
+Update any remaining Android packages.
+</li>
+<li>
+Finally, you might have an update available for the UWP package - however this one has a dependency on Visual Studio and the build of Windows 10 you are running on. Stay on 5.2.x if you are using Visual Studio 2015, or if you are on an older version of Windows 10.
+</li>
+</ol>
+</ide>
+
+<hr>
+<h2>Run the application</h2>
+<p>Depending on your development environment (macOS vs. Windows), you will have different platform options you can test on. Select the one you can run the easiest and work with that for this lab project. Your goal isn't really to exploit the cross-platform nature of Xamarin.Forms UI here, just to show off the MVVM pattern.</p>
+<ol>
+<li>Select one of the platform-specific projects (iOS, Android, UWP, etc.) and make it the <em>active</em> project.</li>
+<li>Build the app to make sure that it compiles.</li>
+<li><strong>Run the app</strong> on Xamarin Live Player, an emulator/simulator, or a physical device. </li>
+<li>It should display a &quot;Welcome to Xamarin.Forms&quot; message.</li>
+</ol>
+<figure class="figure">
+<img src="./images/ex3-start.png" alt="Starting Blank Xamarin.Forms App in UWP" />
+</figure>
+
+<hr>
+<h2>Add the QuickFlicks.Data Library</h2>
+<ol>
+<li>
+<p>Add a reference to the <strong>QuickFlicks.Data</strong> project to each of the projects.</p>
+<ul>
+<li>if you started a new solution, you'll need to add the project to your solution from the <strong>Assets</strong> folder include with the lab materials.</li>
+</ul>
+</li>
+<li>
+Add a NuGet package reference to <strong>Newtonsoft.Json</strong> to each of the platform-specific projects in your Xamarin.Forms solution.
+</li>
+</ol>
+
+<hr>
+<h2>Create the UI in XAML</h2>
+<ol>
+<li>Locate the <strong>QuickFlicks</strong> project where the shared UI is defined.</li>
+</ol>
+<ide name="xs">
+<ol start="2">
+<li>Open the <strong>QuickFlicksPage.xaml</strong> file.</li>
+</ol>
+</ide>
+<ide name="vs">
+<ol start="2">
+<li>Open the <strong>MainPage.xaml</strong> file.</li>
+</ol>
+</ide>
+<ol start="3">
+<li>Replace the content with the following View definition. This will create the same basic UI you used in iOS and Android, a search bar and a TableView/ListView:</li>
+</ol>
+<pre class="prettyprint"><code>&lt;ContentPage.Content&gt;
+    &lt;StackLayout&gt;
+        &lt;SearchBar Placeholder=&quot;Title or Keyword&quot; /&gt;
+        &lt;ListView /&gt;
+    &lt;/StackLayout&gt;
+&lt;/ContentPage.Content&gt;
+</code></pre>
+
+<ol start="4">
+<li>Add a <code>Title</code> property to the <code>ContentPage</code> definition - set it to &quot;QuickFlicks&quot;</li>
+</ol>
+<pre class="prettyprint"><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
+&lt;ContentPage xmlns=&quot;http://xamarin.com/schemas/2014/forms&quot; ...
+             Title=&quot;QuickFlicks&quot;
+             x:Class=&quot;QuickFlicks.MainPage&quot;&gt;
+</code></pre>
+
+
+<hr>
+<h2>Add a Navigation Page</h2>
+<p>While the app will be fine as you have it, you can get a nice header across the top very easily in Xamarin.Forms by adding a <code>NavigationPage</code> to the structure.</p>
+<ol>
+<li>Open the <strong>App.xaml.cs</strong> code behind file in your shared UI project.</li>
+<li>In the constructor, notice that it sets the <code>MainPage</code> property to an instance of the <code>XAML</code> defined UI you just worked with.</li>
+<li>Wrap that instance in a new <code>NavigationPage</code> object and assign that to <code>MainPage</code> instead as shown below:</li>
+</ol>
+<pre class="prettyprint"><code>public App ()
+{
+    InitializeComponent();
+    MainPage = new NavigationPage(new QuickFlicks.MainPage());
+}
+</code></pre>
+
+
+<hr>
+<h2>Create the ViewModel project</h2>
+<p>You could place the ViewModel(s) into the shared project already created by Xamarin.Forms, but it's also helpful to separate it out to a different project to keep it separate (and potentially reuseable) from the Xamarin.Forms platform files.</p>
+<ol>
+<li>Create a new Class Library (PCL, Shared Project, or .NET Standard Library); prefer to use a .NET Standard Library.</li>
+<li>Name it <strong>QuickFlicks.ViewModels</strong>.</li>
+</ol>
+<blockquote>
+The completed lab uses .NET Standard 1.4 libraries which are supported on all platforms - even older versions of UWP. Make sure to select the <strong>.NET Standard Library</strong> template:
+</blockquote>
+<figure class="figure">
+<img src="./images/netstd-lib.png" alt=".NET Standard Library" />
+</figure>
+<blockquote>
+The template included in Visual Studio 2017 targets the latest .NET Standard by default; however not all versions of UWP can use that - specifically you must be on the Fall Creator's Update (FCU) to full support for .NET Standard 2.0. You can change the target version by opening the properties of the .NET Standard Library after you create it and select a different version from the dropdown.
+</blockquote>
+<figure class="figure">
+<img src="./images/netstd-props.png" alt="Changing the Version of a .NET Standard Library" />
+</figure>
+
+<hr>
+<h2>Add the Main View Model</h2>
+<p>You need a primary (main) ViewModel to work with. This will hold your data that you want to expose to the view. ViewModels almost always implement the Observer pattern with <code>INotifyPropertyChanged</code>. We cover this completely in <a href="https://university.xamarin.com/classes#xam270-databinding-xamforms" target="_blank">XAM270 - Data Binding in Xamarin.Forms</a>.</p>
+<ol>
+<li>Create a new C# class in your ViewModels project, name it <strong>MainViewModel.cs</strong>.</li>
+<li>Make the class <code>public</code> and have it implement <code>INotifyPropertyChanged</code></li>
+<li>
+Add a private helper method to raise the <code>PropertyChanged</code> event for a given property name string.
+<ul>
+<li>Name the method <code>RaisePropertyChanged</code></li>
+<li>It should take a <code>string</code> which is the property name.</li>
+<li>You can use the <code>[CallerMemberName]</code> compiler support we cover in <strong>XAM270</strong> to supply the property name if you like. See the code snippet below to see what that is.</li>
+</ul>
+</li>
+</ol>
+<pre class="prettyprint-collapse"><code>public class MainViewModel : INotifyPropertyChanged
+{
+    public event PropertyChangedEventHandler PropertyChanged;
+
+    private void RaisePropertyChanged([CallerMemberName] string propertyName = &quot;&quot;)
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
+}
+</code></pre>
+
+
+<hr>
+<h2>Add a Movie List property</h2>
+<p>ViewModels always expose their data as <strong>public properties</strong>. This is all that the data binding engine supports. You should design your data access with this in mind.</p>
+<p>The first piece of data you need is the list of movies to work with. you can use the same basic logic you put into the Controller in iOS and the Presenter in Android.</p>
+<ol>
+<li>Create a new public property named <strong>Movies</strong> of type <code>IReadOnlyList&lt;Movie&gt;</code>. It should have a getter and a private setter and a backing storage field in the class.</li>
+<li>When the setter is called, use your <code>RaisePropertyChanged</code> method to let any associated data binding know that the property has been changed.</li>
+</ol>
+<pre class="prettyprint-collapse"><code>public class MainViewModel : INotifyPropertyChanged
+{
+    private IReadOnlyList&lt;Movie&gt; _movies;
+
+    public IReadOnlyList&lt;Movie&gt; Movies
+    {
+        get =&gt; _movies;
+        private set
+        {
+            _movies = value;
+            RaisePropertyChanged(nameof(Movies));
+        }
+    }
+}
+</code></pre>
+
+
+<hr>
+<h2>Add search support to the ViewModel</h2>
+<p>Just like the other two apps you've worked on, you need a method to pull your list of movies from iTunes.</p>
+<ol>
+<li>
+Add a new method to the class named <code>OnSearchTermChangedAsync</code> and pass it a <code>string</code> <strong>searchTerm</strong>.
+<ul>
+<li>It should return a <code>Task</code>.</li>
+</ul>
+</li>
+<li>
+Use the logic from the <strong>Presenter</strong> code in Android to implement the method. You want to essentially do the same thing. The difference is that here you'll just assign the results to your <strong>Movies</strong> property.
+<ul>
+<li>Remember to add the <code>CancellationToken</code> support!</li>
+</ul>
+</li>
+</ol>
+<pre class="prettyprint-collapse"><code>private CancellationTokenSource cts;
+private async Task OnSearchTermChangedAsync(string searchTerm)
+{
+    cts?.Cancel();
+
+    if (!string.IsNullOrEmpty(searchTerm))
+    {
+        var innerToken = cts = new CancellationTokenSource();
+
+        var movieService = new MovieService();
+        var movies = await movieService.GetMoviesForSearchAsync(searchTerm);
+        if (!innerToken.IsCancellationRequested)
+        {
+            Movies = movies;
+        }
+    }
+    else
+    {
+        Movies = null;
+    }
+}
+</code></pre>
+
+<blockquote>
+Given that this is the 3rd time you've written a variation of this method, can you think of a principle you should be using here?
+</blockquote>
+
+<hr>
+<h2>Add the UI for displaying a movie</h2>
+<p>Now that you have a <strong>Movie</strong> collection, let's add in the View code to display it. To do that, you need to data bind the <code>ListView</code> to your ViewModel data. You cover the <code>ListView</code> and the specific things you are doing here in an earlier class <a href="https://university.xamarin.com/classes#xam280-listview-xamforms" target="_blank">XAM280 - Using ListViews in Xamarin.Forms</a>.</p>
+<ol>
+<li>Open the XAML file where you defined the <code>ListView</code>.</li>
+<li>Data bind the <code>ItemsSource</code> property to the <code>Movies</code> property.</li>
+<li>
+Set the <code>ItemTemplate</code> to be a simple <code>TextCell</code>
+<ul>
+<li>Data bind the <code>Text</code> to the movie <code>Title</code>.</li>
+<li>Data bind the <code>Detail</code> to the movie <code>Description</code>.</li>
+</ul>
+</li>
+</ol>
+<pre class="prettyprint"><code>&lt;ListView ItemsSource=&quot;{Binding Movies}&quot;&gt;
+    &lt;ListView.ItemTemplate&gt;
+        &lt;DataTemplate&gt;
+            &lt;TextCell Text=&quot;{Binding Title}&quot; Detail=&quot;{Binding Description}&quot; /&gt;
+        &lt;/DataTemplate&gt;
+    &lt;/ListView.ItemTemplate&gt;
+&lt;/ListView&gt;
+</code></pre>
+
+
+<hr>
+<h2>Set the binding context</h2>
+<p>You are almost able to run the app and see some results. You need to do one major thing first though, associate the View Model with the View you just setup. This is covered in the <strong>XAM270</strong> Data Binding class, but it's very simple:</p>
+<ol>
+<li>First, add a reference to your <strong>QuickFlicks.ViewModels</strong> library to each of your other Xamarin.Forms projects.</li>
+<li>Open the <strong>xaml.cs</strong> code behind file for your UI.</li>
+<li>Set the <code>BindingContext</code> property to a new instance of your <code>MainViewModel</code>. You'll likely need a <code>using</code> statement to bring the class into scope. You can set this either before or after the call to <code>InitializeComponent</code>.</li>
+</ol>
+<pre class="prettyprint"><code>using QuickFlicks.ViewModels;
+
+public partial class MainPage : ContentPage
+{
+    public MainPage()
+    {
+        BindingContext = new MainViewModel();
+        InitializeComponent();
+    }
+}
+</code></pre>
+
+
+<hr>
+<h2>Test the Movies list</h2>
+<p>Now, you need to test the retrieval of movies and display in your list.</p>
+<ol>
+<li>Go back to your ViewModel implementation.</li>
+<li>Add a public, default constructor to the class.</li>
+<li>Add a call to <code>OnSearchTermChangedAsync</code> in the constructor with your favorite search term.</li>
+<li>Run the app - it should display your movies!</li>
+</ol>
+<figure class="figure">
+<img src="./images/show-movies.png" alt="Movies shown in the UWP app" />
+</figure>
+
+<hr>
+<h2>Add a Search property to the ViewModel</h2>
+<p>Just like the other two apps you've worked on, you have a <code>SearchBar</code> in your View. You'll want to track what the user types there and respond by changing the movie list. Add a <code>string</code> to capture the search text.</p>
+<ol>
+<li>Add a new public property named <code>SearchText</code> with a backing field (e.g. do <em>not</em> use an auto property).</li>
+<li>When the setter is called, use your <code>RaisePropertyChanged</code> method to notify the binding system that the property value has changed. This will then push the value into UI.</li>
+<li>It's always a good idea to only do the property setter logic if the property value has actually changed - test that with an <code>if</code> condition and only do your code if the value is different than the stored field.</li>
+</ol>
+<pre class="prettyprint-collapse"><code>public class MainViewModel : INotifyPropertyChanged
+{
+    private string searchTerm;
+
+    public string SearchTerm
+    {
+        get =&gt; searchTerm;
+        set
+        {
+            if (searchTerm != value)
+            {
+                searchTerm = value;
+                RaisePropertyChanged();
+            }
+        }
+    }
+}
+</code></pre>
+
+
+<hr>
+<h2>Connect the search logic to the Search property</h2>
+<p>Now that you've got the <code>SearchText</code> property, and your <code>OnSearchTermChangedAsync</code> method, you need to connect the two.</p>
+<ol>
+<li>In the property setter for <code>SearchText</code>, call <code>OnSearchTermChangedAsync</code> with the new value.</li>
+</ol>
+<blockquote class="danger-quote">This will show some green squiggles under the call because it's async and you aren't <code>await</code>ing it. However, this is a <em>property</em> which cannot use <code>async</code> and <code>await</code>!
+</blockquote>
+<ol start="2">
+<li>To fix the compiler warning about the call not be awaited on, let's resort to an older way to get the result from a <code>Task</code> - a continuation. We cover this technique extensively in our <a href="https://university.xamarin.com/classes/track/csharp#csc351-tasks" target="_blank">CSC351 - Writing Multithreaded Mobile Applications</a> class. But you can use the following code which will make sure that any exceptions are noticed on the main thread. It also will remove the compiler warning.</li>
+</ol>
+<pre class="prettyprint"><code>OnSearchTermChangedAsync(searchTerm)
+    .ContinueWith(tr =&gt; throw new Exception(&quot;Search Failed.&quot;, tr.Exception),
+    TaskContinuationOptions.OnlyOnFaulted);
+</code></pre>
+
+
+<hr>
+<h2>Bind the SearchTerm property to the UI</h2>
+<p>The last step to make this a fully functional program is to data bind the <code>SearchTerm</code> property in your View Model to the View.</p>
+<ol>
+<li>Open the <strong>XAML</strong> view definition and find the <code>SearchBar</code>.</li>
+<li>
+Apply a data binding to the <code>Text</code> property to associate it to the <code>SearchTerm</code> property with a two-way binding.
+<ul>
+<li>remember your <code>BindingContext</code> is the View Model.</li>
+</ul>
+</li>
+</ol>
+<pre class="prettyprint"><code>&lt;SearchBar Placeholder=&quot;Title or Keyword&quot; Text=&quot;{Binding SearchTerm, Mode=TwoWay}&quot; /&gt;
+</code></pre>
+
+<ol start="3">
+<li>You can remove the test call in the <code>MainViewModel</code> constructor to make the initial <code>ListView</code> empty again.</li>
+<li>Run the app to try out the search capability.</li>
+</ol>
+<figure class="figure">
+<img src="./images/ex3-completed.png" alt="Filtering our movies in UWP" />
+</figure>
+
+<hr>
+<h2>Optimizing your bindings (OPTIONAL)</h2>
+<p>The last thing you can do if you have time is to optimizing the binding engine by turning on compiled bindings. There are two things you have to do to make this work:</p>
+<ol>
+<li>Turn on the XAML compiler (XAMLC).</li>
+<li>Tell the <code>DataTemplate</code> definition what data type it's working with.</li>
+</ol>
+<p>Here's the steps for this project.</p>
+<ol>
+<li>Open the <strong>.xaml.cs</strong> code-behind file for your View.</li>
+<li>Add the following assembly-level directive to the file <em>before</em> the <code>namespace</code> declaration. This turns on the XAML compiler for all XAML pages defined in this project/assembly.</li>
+</ol>
+<pre class="prettyprint"><code>[assembly: XamlCompilation(XamlCompilationOptions.Compile)]
+
+namespace QuickFlicks
+{
+    public partial class MainPage : ContentPage
+</code></pre>
+
+<ol start="3">
+<li>Next, switch to the <strong>XAML</strong> page.</li>
+<li>At the top of the file, with the other <code>xmlns</code> definitions, add one for your Model objects:</li>
+</ol>
+<pre class="prettyprint"><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
+&lt;ContentPage xmlns=&quot;http://xamarin.com/schemas/2014/forms&quot;
+             xmlns:x=&quot;http://schemas.microsoft.com/winfx/2009/xaml&quot;
+             xmlns:local=&quot;clr-namespace:QuickFlicks&quot;
+             <mark>xmlns:model=&quot;clr-namespace:QuickFlicks.Data;assembly=QuickFlicks.Data&quot;</mark>
+             Title=&quot;QuickFlicks&quot;
+</code></pre>
+
+<ol start="5">
+<li>Next, find the <code>DataTemplate</code> definition you created for the <code>ListView</code>. Add a <code>x:DataType</code> property to it and set the value to &quot;model:Movie&quot;.</li>
+</ol>
+<pre class="prettyprint"><code>&lt;ListView.ItemTemplate&gt;
+    &lt;DataTemplate <mark>x:DataType=&quot;model:Movie&quot;</mark> &gt;
+        &lt;TextCell Text=&quot;{Binding Title}&quot; Detail=&quot;{Binding Description}&quot; /&gt;
+    &lt;/DataTemplate&gt;
+&lt;/ListView.ItemTemplate&gt;
+</code></pre>
+
+
+<hr>
+<h2>Exercise summary</h2>
+<p>In this exercise, you created a new Xamarin.Forms application using the Model-View-ViewModel architectural style.</p>
+<ul>
+<li>The <strong>Model</strong> was contained in the a separate assembly/layer.</li>
+<li>The <strong>View</strong> was created in a .XAML file.</li>
+<li>The <strong>ViewModel</strong> was a separate class (in a separate assembly) that was connected to the View through Xamarin.Forms Data Binding.</li>
+</ul>
+<p>You can view the completed solution in the <strong>Exercise 3</strong> &gt; <strong>Completed</strong> folder of your copy of the cloned or downloaded <a href="https://github.com/XamarinUniversity/XAM301/">course materials</a>.</p>
+
+
+        <div class="align-right">
+            <a href="../StartHere.html">Go Back</a>
+        </div>
+
+    </section>
+
+    <script src="./res/js/jquery.min.js"></script>
+    <script src="./res/js/jquery.imagemapster.min.js"></script>
+    <script src="./res/js/imagemap.js"></script>
+    <script src="./res/js/prettify.js"></script>
+    <script src="./res/js/script.js"></script>
+
+    <footer>Copyright (C) 2018 Xamarin Inc., Microsoft. All rights reserved.<br><a target="_blank" href="http://university.xamarin.com">Visit Xamarin University for more classes and content</a></footer>
+
+</body>
+</html>

@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+    <title>Exercise 2: Apply MVP in an Android application (XAM301)</title>
+    <link rel="stylesheet" type="text/css" href="./res/styles/normalize.css">
+    <link rel="stylesheet" type="text/css" href="./res/styles/prettify.css" />
+    <link rel="stylesheet" type="text/css" href="./res/styles/styles.css">
+</head>
+
+<body>
+    <!-- Use the same title as the StartHere -->
+    <header>XAM301 Mobile application architecture</header>
+
+    <section id="main">
+        <h2>Exercise 2: Apply MVP in an Android application (XAM301)</h2>
+<p>This exercise walks you through building a new Android application using the <strong>Model-View-Presenter</strong> application style.</p>
+<figure class="figure">
+<img src="./images/ex2-completed.png" alt="Screenshot of the completed exercise running on Android." class="exercise portrait bordered" title="Completed exercise" />
+<figcaption class="figure-caption">Completed exercise</figcaption>
+</figure>
+<blockquote class="info-quote">To complete the exercise, you will need <a href="https://www.visualstudio.com/" target="_blank">Visual Studio for Windows or macOS</a> with the <a href="https://visualstudio.microsoft.com/xamarin/" target="_blank">Xamarin development tools</a> installed. You will also need either an emulator/simulator or a device to run the exercise on. Please see the <a href="https://docs.microsoft.com/xamarin/cross-platform/get-started/installation/" target="_blank">setup page</a> if you need help installing the Xamarin development environment.
+</blockquote>
+
+<hr>
+<h2>Create a new Xamarin.Android project</h2>
+<p>You're going to add an Android version of our QuickFlicks app. You can either add the project to your existing solution with the iOS version, or you can create a new solution.</p>
+<ide name="xs">
+<p>Create a new project using Visual Studio for Mac:</p>
+<ol>
+<li>Launch <strong>Visual Studio</strong> for Mac.</li>
+<li>Select <strong>File</strong> &gt; <strong>New Solution</strong> or right-click on the Solution node and select <strong>Add</strong> &gt; <strong>Add New Project</strong>.</li>
+<li>Locate the <strong>Android</strong> &gt; <strong>App</strong> category.</li>
+<li>Choose the <strong>Blank Android App</strong> template.</li>
+</ol>
+</ide>
+<ide name="vs">
+<p>Create a new project using Visual Studio for Windows:</p>
+<ol>
+<li>Launch <strong>Visual Studio</strong> for Windows.</li>
+<li>Select <strong>File</strong> &gt; <strong>New</strong> &gt; <strong>Project</strong>.</li>
+<li>Locate the <strong>Visual C#</strong> &gt; <strong>Android</strong> category.</li>
+<li>Choose the <strong>Blank App (Android)</strong> template.</li>
+</ol>
+</ide>
+
+<hr>
+<h2>Choose your project name and location</h2>
+<ide name="xs">
+<ol>
+<li>Name the app <strong>QuickFlicks.Droid</strong>.</li>
+<li>Adjust any options you like and click <strong>Next</strong>.</li>
+<li>Choose a location for the project.</li>
+<li>Use the default values for all other project settings.</li>
+<li>Click <strong>Create</strong>.</li>
+</ol>
+</ide>
+<ide name="vs">
+<ol>
+<li>Name the app <strong>QuickFlicks.Droid</strong>.</li>
+<li>Choose a location for the project.</li>
+<li>Change the <strong>Solution</strong> option to &quot;Add to Solution&quot; if you want to add the project to your existing solution.</li>
+<li>Use the default values for all other project settings.</li>
+<li>Click <strong>OK</strong>.</li>
+</ol>
+</ide>
+
+<hr>
+<h2>Run the application</h2>
+<ol>
+<li>Build the app to make sure that it compiles.</li>
+<li><strong>Run the app</strong> on Xamarin Live Player, an emulator, or a physical device.</li>
+<li>It should display an empty screen on your device.</li>
+</ol>
+<figure class="figure">
+<img src="./images/ex2-start.png" alt="Starting Blank Android App" />
+</figure>
+
+<hr>
+<h2>Add the QuickFlicks.Data Library</h2>
+<ol>
+<li>
+Add a reference to the <strong>QuickFlicks.Data</strong> project to your new Android app.
+<ul>
+<li>if you started a new solution, you will need to add the project to your solution from the <strong>Assets</strong> folder include with the lab materials.</li>
+</ul>
+</li>
+</ol>
+<ide name="vs">
+<ol start="2">
+<li>Add a NuGet package reference to <strong>Newtonsoft.Json</strong> to your Android project.</li>
+</ol>
+</ide>
+<ide name="xs">
+<ol start="2">
+<li>Add a NuGet package reference to <strong>Newtonsoft.Json</strong> to your Android project.</li>
+</ol>
+</ide>
+
+<hr>
+<h2>Create the UI with the Android Designer</h2>
+<ol>
+<li>Expand the <strong>Resources</strong> folder in the solution and locate the <strong>layout</strong> folder.</li>
+<li>
+Open the <strong>Main.axml</strong> file in the <strong>layout</strong> folder. This is the View for our main <code>Activity</code>.
+<ul>
+<li>Once the designer loads, you'll see a blank screen, it's really a <code>LinearLayout</code> which is exactly what you want.</li>
+</ul>
+</li>
+<li>Locate the <code>SearchView</code> component in the ToolBox. You can use the Search box at the top to quickly find it.</li>
+<li>Drag a <code>SearchView</code> from the ToolBox onto the design surface. It should be positioned at the top of the designer view.</li>
+<li>Click on the search view to select it, and in the Properties pane, locate the <strong>id</strong> property and change the value to &quot;@+id/searchView&quot;.</li>
+<li>Locate the <code>ListView</code> component in the ToolBox and drag one below your search view.</li>
+<li>Select the ListView in your design and change the <strong>id</strong> to &quot;@+id/movieList&quot;.</li>
+</ol>
+
+<hr>
+<h2>Create the Presenter</h2>
+<p>The MVP style can be implemented in a few ways with the code-behind style used in Android (or similar GUI frameworks). You could make the code-behind file the presenter and put your logic there, or you can create a <em>dedicated presenter class</em> and use it from the Activity code. You'll take this latter approach since it tends to be more testable and conforms more closely to your goal of separating out domain logic from the view.</p>
+<ol>
+<li>Create a new C# class in the project and name it <code>MoviePresenter</code>.</li>
+<li>
+Add a new public method named <code>FilterMoviesAsync</code> to the presenter class.
+<ul>
+<li>Have it take a <code>string</code> for the <strong>searchTerm</strong>.</li>
+<li>Have it return <code>Task</code>.</li>
+</ul>
+</li>
+</ol>
+<p>You'll load movies from your <code>MovieService</code>, but you need to push that data to the View. There are a variety of solutions. You could use an Observer pattern (e.g. <code>ObservableCollection&lt;T&gt;</code>), but you'll use a different approach.</p>
+<ol start="3">
+<li>Add a public <code>event</code> of type <code>Action&lt;IReadOnlyList&lt;Movie&gt;&gt;</code> named <code>FilterApplied</code> to the class. You'll have clients subscribe to this event to be notified when your movies have been filtered and have a new list to pull from.</li>
+</ol>
+<pre class="prettyprint-collapse"><code>public class MoviePresenter
+{
+   public event Action&lt;IReadOnlyList&lt;Movie&gt;&gt; FilterApplied;
+   ...
+}
+</code></pre>
+
+<ol start="4">
+<li>
+<p>Now you can implement your <code>FilterMoviesAsync</code>. If the passed <strong>searchTerm</strong> is not empty, make a call to the <code>MovieService</code> like you did in iOS, and pass the results to the new event you just created.</p>
+<ul>
+<li>You will need to <code>await</code> the returning Task to get to the data.</li>
+</ul>
+</li>
+<li>
+If the <strong>searchTerm</strong> is empty, invoke the event with <code>null</code> to indicate to value. Remember that .NET events are <code>null</code> in C# if there are no subscribers - use the <a href="https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/operators/null-conditional-operators" target="_blank">conditional null operator</a>, or explicitly test the event before you call it.
+</li>
+</ol>
+<pre class="prettyprint-collapse"><code>public async Task FilterMoviesAsync(string search)
+{
+    if (!string.IsNullOrEmpty(search))
+    {
+        var movieService = new MovieService();
+        var movies = await movieService.GetMoviesForSearchAsync(search);
+        FilterApplied?.Invoke(movies);
+    }
+    else
+    {
+        FilterApplied?.Invoke(null);
+    }
+}
+</code></pre>
+
+
+<hr>
+<h2>Add the ListView Adapter</h2>
+<p>Just like iOS, the Android <code>ListView</code> uses a separated data pattern to supply data to display. In fact, the pattern used is almost identical. You have complete coverage of this topic in our <a href="https://university.xamarin.com/classes#and110-list-views-and-adapters-in-android" target="_blank">AND110 - ListViews and Adapters</a> class at Xamarin University.</p>
+<p>Since this part isn't relevant to your usage of MVP, there is a predefined <code>MovieAdapter</code> contained in the <strong>Assets</strong> folder for this lab part.</p>
+<ol>
+<li>
+Add the <strong>MovieAdapter.cs</strong> file to the Android project. You can find the source file in the <strong>Exercise 2/Assets</strong> folder, or online in <a href="https://github.com/XamarinUniversity/XAM301/blob/master/Exercise%202/Completed/Fixster.Droid/MovieAdapter.cs" target="_blank">GitHub</a>.
+</li>
+<li>
+Open the file to examine the contents. It implements the built-in Xamarin.Android class <code>BaseAdapter&lt;T&gt;</code> and has an additional method named <code>SetData</code> to assign the <code>Movie</code> collection. It also uses the <a href="https://developer.android.com/training/improving-layouts/smooth-scrolling.html" target="_blank">View Holder pattern</a> to optimize access to the view generated. 
+</li>
+</ol>
+
+<hr>
+<h2>Connect the Adapter to the ListView</h2>
+<ol>
+<li>Open the <strong>MainActivity.cs</strong> file and locate the <code>OnCreate</code> override.</li>
+<li>
+After the call to <code>SetContentView</code>, use the <code>FindViewById</code> method to locate your <code>ListView</code> and assign it to a local named <code>movieList</code>.
+<ul>
+<li>the resource ID should be <code>Resource.Id.movieList</code> if you gave it the proper <strong>id</strong>.</li>
+</ul>
+</li>
+<li>Create a new <code>MovieAdapter</code> object and assign it to a local named <code>adapter</code>.</li>
+<li>Assign the <code>adapter</code> to the <code>Adapter</code> property on the <code>ListView</code>.</li>
+</ol>
+<pre class="prettyprint-collapse"><code>var movieList = FindViewById&lt;ListView&gt;(Resource.Id.movieList);
+var adapter = new MovieAdapter();
+movieList.Adapter = adapter;
+</code></pre>
+
+
+<hr>
+<h2>Use the Presenter to fetch movies</h2>
+<ol>
+<li>After the <code>MovieAdapter</code> has been assigned to the <code>ListView</code>, create a new <code>MoviePresenter</code> object and assign it to a new private field in your <code>Activity</code> class. Name the field <code>presenter</code>.</li>
+<li>Wire up the <code>FilterApplied</code> event to the <code>MovieAdapter.SetData</code> method on your adapter local object.</li>
+<li>
+Finally, to test it, make a call to the presenter's <code>FilterMoviesAsync</code> method - pass it your favorite search term.
+<ul>
+<li>You should <code>await</code> the method to make sure any exceptions are moved back to the main thread.</li>
+</ul>
+</li>
+</ol>
+<pre class="prettyprint-collapse"><code>protected async override void OnCreate(Bundle savedInstanceState)
+{
+    ...
+    movieList.Adapter = adapter;
+
+    presenter = new MoviePresenter();
+    presenter.FilterApplied += adapter.SetData;
+    await presenter.FilterMoviesAsync(&quot;Star Wars&quot;);
+}
+</code></pre>
+
+<ol start="4">
+<li>Run the app -- it should display your movies!</li>
+</ol>
+<figure class="figure">
+<img src="./images/we-have-movies.png" alt="We have movies" />
+</figure>
+
+<hr>
+<h2>Add support for searching</h2>
+<p>Now, respond to the <code>SearchView</code> and adjust your movies. Again you are going to pass the functionality off to your presenter class, but the actual UI action will be handled in your code behind <code>Activity</code> file.</p>
+<ol>
+<li>Locate the <code>SearchView</code> you added into the layout - the <strong>id</strong> should be <code>Resource.Id.searchView</code>.</li>
+<li>Wire up to the <code>QueryTextChange</code> event on the SearchView to a method in the <code>Activity</code>.</li>
+<li>In the event handler, call the Presenter's <code>FilterMoviesAsync</code> to change the movie filter.</li>
+<li>You can comment out the test call to <code>FilterMoviesAsync</code> in <code>OnCreate</code> so you start with an empty screen.</li>
+<li>Run the app and type into the search box - you should see movies update!</li>
+</ol>
+<pre class="prettyprint-collapse"><code>protected override void OnCreate(Bundle savedInstanceState)
+{
+    ...
+    var searchView = FindViewById&lt;SearchView&gt;(Resource.Id.searchView);
+    searchView.QueryTextChange += OnSearch;
+}
+
+private async void OnSearch(object sender, SearchView.QueryTextChangeEventArgs e)
+{
+    await presenter.FilterMoviesAsync(e.NewText);
+}
+</code></pre>
+
+<figure class="figure">
+<img src="images/ex2-completed.png" alt="Final application running on Android" />
+</figure>
+
+<hr>
+<h2>Optimizing the search experience</h2>
+<p>If you type different terms rather quickly, you might notice that the app bogs down, or even has incorrect search results. This is because you are always completing every search request and updating the UI. This happens even if you've replaced the term before the original search was finished.</p>
+<p>This was a problem in iOS too - but iOS is often a bit faster than Android and can hide problems like this.</p>
+<p>You can fix this by providing some type of <em>cancellation</em>. Unfortunately, your <code>MovieService</code> doesn't take a cancellation token, but you can use a <code>CancellationToken</code> in your presenter to implement this.</p>
+<ol>
+<li>Open the <code>MoviePresenter</code> class.</li>
+<li>Add a new <code>CancellationTokenSource</code> field to the class. Name it <strong>cts</strong>.</li>
+<li>In the <code>FilterMoviesAsync</code> method, before you do any calls, use the <code>Cancel</code> method on your token source if it's not null.</li>
+<li>If the search term is <em>not</em> empty, create a new <code>CancellationTokenSource</code> and assign it to the <strong>cts</strong> field.</li>
+<li>Capture the value of the token source by copying the value of the <strong>cts</strong> field into a captured local field so you have a copy of it in case a second invocation cancels this request and reassigns it. Name this captured version <strong>innerToken</strong>.</li>
+<li>Once the <code>MovieService</code> returns, <em>before</em> you change the movie list, check the local <strong>innerToken</strong> and see if cancellation has been requested using the <code>IsCancellationRequested</code> property. If it has, just return, otherwise invoke the event to change your movie listings.</li>
+</ol>
+<p>If you need some help with this, check the code below for the full class implementation.</p>
+<pre class="prettyprint-collapse"><code>public class MoviePresenter
+{
+    private CancellationTokenSource cts;
+
+    public event Action&lt;IReadOnlyList&lt;Movie&gt;&gt; FilterApplied;
+
+    public async Task FilterMoviesAsync(string search)
+    {
+        cts?.Cancel();
+
+        if (!string.IsNullOrEmpty(search))
+        {
+            var innerToken = cts = new CancellationTokenSource();
+            var movieService = new MovieService();
+            var movies = await movieService.GetMoviesForSearchAsync(search);
+
+            if (!innerToken.IsCancellationRequested)
+            {
+                FilterApplied?.Invoke(movies);
+            }
+        }
+        else
+        {
+            FilterApplied?.Invoke(null);
+        }
+    }
+}
+</code></pre>
+
+<ol start="7">
+<li>Run the app again and see the performance improvement. On lower end devices it will be very evident.</li>
+</ol>
+
+<hr>
+<h2>Exercise summary</h2>
+<p>In this exercise, you created a new Xamarin.Android application using the Model-View-Presenter architectural style.</p>
+<p>The <strong>Model</strong> was contained in the a separate assembly/layer.
+The <strong>View</strong> was created in an <strong>.AXML</strong> file.
+The Activity code behind acted as a part of the presenter by connecting the Views to your presenter class.
+The <strong>Presenter</strong> was a separate class owned by the Activity and performed the visual logic by pulling data from the MovieService.</p>
+<p>You can view the completed solution in the <strong>Exercise 2</strong> &gt; <strong>Completed</strong> folder of your copy of the cloned or downloaded <a href="https://github.com/XamarinUniversity/XAM301/">course materials</a>.</p>
+
+
+        <div class="align-right">
+            <a href="../StartHere.html">Go Back</a>
+        </div>
+
+    </section>
+
+    <script src="./res/js/jquery.min.js"></script>
+    <script src="./res/js/jquery.imagemapster.min.js"></script>
+    <script src="./res/js/imagemap.js"></script>
+    <script src="./res/js/prettify.js"></script>
+    <script src="./res/js/script.js"></script>
+
+    <footer>Copyright (C) 2018 Xamarin Inc., Microsoft. All rights reserved.<br><a target="_blank" href="http://university.xamarin.com">Visit Xamarin University for more classes and content</a></footer>
+
+</body>
+</html>
