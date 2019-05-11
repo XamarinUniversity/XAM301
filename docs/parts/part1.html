@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+    <title>Exercise 1: Apply MVC in an iOS application (XAM301)</title>
+    <link rel="stylesheet" type="text/css" href="./res/styles/normalize.css">
+    <link rel="stylesheet" type="text/css" href="./res/styles/prettify.css" />
+    <link rel="stylesheet" type="text/css" href="./res/styles/styles.css">
+</head>
+
+<body>
+    <!-- Use the same title as the StartHere -->
+    <header>XAM301 Mobile application architecture</header>
+
+    <section id="main">
+        <h2>Exercise 1: Apply MVC in an iOS application (XAM301)</h2>
+<p>This exercise walks you through building a new iOS application using the <strong>Model-View-Controller</strong> application style.</p>
+<figure class="figure">
+<img src="images/ex1-completed.png" alt="Final application running on iOS" class="exercise portrait bordered" title="Completed exercise" />
+<figcaption class="figure-caption">Completed exercise</figcaption>
+</figure>
+<blockquote class="info-quote">To complete the exercise, you will need <a href="https://www.visualstudio.com/" target="_blank">Visual Studio for Windows or macOS</a> with the <a href="https://visualstudio.microsoft.com/xamarin/" target="_blank">Xamarin development tools</a> installed. You will also need either an emulator/simulator or a device to run the exercise on. Please see the <a href="https://docs.microsoft.com/xamarin/cross-platform/get-started/installation/" target="_blank">setup page</a> if you need help installing the Xamarin development environment.
+</blockquote>
+
+<hr>
+<h2>Create a new Xamarin.iOS project</h2>
+<ide name="xs">
+<p>Create a new project using Visual Studio for Mac:</p>
+<ol>
+<li>Launch <strong>Visual Studio</strong> for Mac.</li>
+<li>Select <strong>File</strong> &gt; <strong>New Solution</strong>.</li>
+<li>Locate the <strong>iOS</strong> &gt; <strong>App</strong> category.</li>
+<li>Choose the <strong>Single View App</strong> template.</li>
+</ol>
+</ide>
+<ide name="vs">
+<p>Create a new project using Visual Studio for Windows:</p>
+<ol>
+<li>Launch <strong>Visual Studio</strong> for Windows.</li>
+<li>Select <strong>File</strong> &gt; <strong>New</strong> &gt; <strong>Project</strong>.</li>
+<li>Locate the <strong>Visual C#</strong> &gt; <strong>iOS</strong> &gt; <strong>iPhone</strong> category.</li>
+<li>Choose the <strong>Single-View App (iPhone)</strong> template.</li>
+</ol>
+</ide>
+
+<hr>
+<h2>Choose your project name and location</h2>
+<ide name="xs">
+<ol>
+<li>Name the app <strong>QuickFlicks.iOS</strong>.</li>
+<li>Uncheck <strong>iPad</strong> from the Devices selection and click <strong>Next</strong>.</li>
+<li>Choose a location for the project.</li>
+<li>Use the default values for all other project settings.</li>
+<li>Click <strong>Create</strong>.</li>
+</ol>
+</ide>
+<ide name="vs">
+<ol>
+<li>Name the app <strong>QuickFlicks.iOS</strong>.</li>
+<li>Choose a location for the project.</li>
+<li>Use the default values for all other project settings.</li>
+<li>Click <strong>OK</strong>.</li>
+</ol>
+</ide>
+
+<hr>
+<h2>Run the application</h2>
+<ol>
+<li>Build the app to make sure that it compiles.</li>
+<li><strong>Run the app</strong> on a simulator, or a physical device.</li>
+<li>It should display an empty screen on your device.</li>
+</ol>
+
+<hr>
+<h2>Add the QuickFlicks.Data Library</h2>
+<p>Next, you'll need the <strong>QuickFlicks.Data</strong> code from the <strong>Asset</strong> folder in the downloaded code materials from <a href="https://github.com/XamarinUniversity/XAM301/">GitHub</a>. You need to add it to your solution, and then reference it from your iOS project you just created so it can pull the data you want to display.</p>
+<ide name="xs">
+<p>Add the project to your solution using Visual Studio for Mac:</p>
+<ol>
+<li>Copy the <strong>Assets/QuickFlicks.Data</strong> folder into your solution folder.</li>
+<li>Add <strong>QuickFlicks.Data.csproj</strong> to the solution using <strong>Add</strong> &gt; <strong>Add Existing Project</strong>.</li>
+<li>Build the solution to make sure everything builds properly.</li>
+<li>Next, add a reference to the <strong>QuickFlicks.Data</strong> project to your iOS project.</li>
+</ol>
+</ide>
+<ide name="vs">
+<p>Add the project to your solution using Visual Studio for Windows:</p>
+<ol>
+<li>Copy the <strong>Assets/QuickFlicks.Data</strong> folder into your solution folder.</li>
+<li>Add <strong>QuickFlicks.Data.csproj</strong> to the solution using <strong>Add</strong> &gt; <strong>Existing Project</strong>.</li>
+<li>Build the solution to make sure everything builds properly.</li>
+<li>Next, add a reference to the <strong>QuickFlicks.Data</strong> project to your iOS project.</li>
+</ol>
+</ide>
+
+<hr>
+<h2>Explore the QuickFlicks.Data project</h2>
+<p>The <strong>QuickFlicks.Data</strong> project is a .NET Standard library with three source files.</p>
+<table class="table table-striped">
+<thead>
+<tr>
+	<th>File</th>
+	<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+	<td><code>Movie.cs</code></td>
+	<td>This is a simple POCO (Plain old C# object) to represent a Movie in our app. This is our <strong>Model</strong> for the app.</td>
+</tr>
+<tr>
+	<td><code>MovieService.cs</code></td>
+	<td>This is a REST service client which uses the iTunes public web API to retrieve movie lists from Apple's servers.</td>
+</tr>
+<tr>
+	<td><code>MovieSearchResponse.cs</code></td>
+	<td>This is a JSON representation of the data coming back from iTunes. It's an internal class used to deserialize the response.</td>
+</tr>
+</tbody>
+</table>
+<ol>
+<li>Open the <strong>MovieService.cs</strong> source file.</li>
+<li>You'll use the <code>GetMoviesForSearchAsync</code> method on <code>MovieService</code> to retrieve your data. It takes a search string and a page counter should you want to support multiple pages of data. By default, the service returns the top 25 hits for a given search pattern.</li>
+</ol>
+
+<hr>
+<h2>Add Newtonsoft JSON.NET package</h2>
+<p>The <strong>QuickFlicks.Data</strong> project uses the <a href="https://www.nuget.org/packages/Newtonsoft.Json/" target="_blank">Newtonsoft.Json NuGet package</a>, which means you'll need to add a reference to this package to each of your projects that use the data library.</p>
+<ide name="vs">
+<ol>
+<li>
+Add a NuGet package reference to <strong>Newtonsoft.Json</strong> to your iOS project.
+<ul>
+<li>You can either use the Package Manager console, or the GUI in Visual Studio.</li>
+</ul>
+</li>
+</ol>
+<pre class="prettyprint"><code>PM&gt; Install-Package Newtonsoft.Json
+</code></pre>
+
+</ide>
+<ide name="xs">
+<ol>
+<li>
+Add a NuGet package reference to <strong>Newtonsoft.Json</strong> to your iOS project.
+<ul>
+<li>Right-click on the <strong>Packages</strong> folder and select <strong>Add Packages...</strong>.</li>
+<li>Search for <strong>Newtonsoft.Json</strong> (it's often the first item in the list by default).</li>
+<li>Click <strong>Add Package</strong> to add it to your project.</li>
+</ul>
+</li>
+</ol>
+</ide>
+
+<hr>
+<h2>Add a UITableViewController</h2>
+<p>The <strong>Single View</strong> template you used to create this application generated an iOS Storyboard with a single View + View Controller. You are going to replace that with a more sophisticated <code>UITableViewController</code> so you can display a list of movies.</p>
+<ol>
+<li>Open the file <strong>Main.storyboard</strong>.</li>
+<li>Use the zoom controls to make some room on the design surface.</li>
+<li>Drag a <strong>Table View Controller</strong> from the Toolbox onto the design surface.</li>
+<li>Drag the &quot;initial view arrow&quot; which is pointing to the original View Controller to your new Table View Controller.</li>
+<li>Click on the bottom bar of your Table View Controller to select the controller portion of the element.</li>
+<li>Open the <strong>Properties</strong> pane and verify that the <strong>Class</strong> value is current <code>UITableViewController</code>. If it says something else, you have the wrong object selected.</li>
+<li>Create a new code-behind class for the View Controller by changing the current <strong>Class</strong> to <code>MovieTableViewController</code>. When you press <strong>Enter</strong>, a new class will be created and added to the project.</li>
+<li>Just to cleanup, right-click on the original View Controller and select <strong>Delete</strong> to remove it from the Storyboard.</li>
+</ol>
+<ide name="xs">
+<img src="./images/vsmac-tableview.gif" alt="Add a Table View Controller in Visual Studio for macOS" />
+</ide>
+<ide name="vs">
+<img src="./images/vswin-tableview.gif" alt="Add a Table View Controller in Visual Studio for Windows" />
+</ide>
+
+<hr>
+<h2>Add a SearchBar to the Table View</h2>
+<p>The UI will currently have a Table View to display a list of data. You'll add some movies in a moment. Complement the Table View by adding a <code>UISearchBar</code> to the top of the page.</p>
+<ol>
+<li>Close the Storyboard.</li>
+<li>In the Solution Explorer, if the <strong>ViewController.cs</strong> is still in the project, go ahead and delete it.</li>
+<li>Open the <strong>MovieTableViewController.cs</strong> file. It should be a class that derives from <code>UITableViewController</code> and has a constructor.</li>
+</ol>
+<blockquote>
+This class is your <em>View Controller</em> which is the <strong>Controller</strong> part of the MVC pattern you are using in iOS. It's where all your interaction with the view will take place. You can create new child views in this class, wire up events to the views created in the Storyboard, and provide the logic for any user activity that occurs in the view.
+</blockquote>
+<ol start="4">
+<li>Add a new field to the class of type <code>UISearchController</code> named <strong>searchController</strong>.</li>
+</ol>
+<pre class="prettyprint"><code>public partial class MovieTableViewController : UITableViewController
+{
+   private UISearchController searchController;
+   ...
+}
+</code></pre>
+
+<blockquote>
+Notice that you are adding a <em>controller</em> class here - not a view. Although you <em>could</em> add a view and provide the logic for it in your existing View Controller, Apple creates controllers intended to manage specific composite controls such as the <code>UISearchBar</code> that provide the logic necessary to drive the search experience. Your main view controller for the app (the <code>UITableViewController</code> in this case) can then benefit from the separation of concerns and only deal with the <em>data</em> from the search bar.
+</blockquote>
+<ol start="5">
+<li>Override the <code>ViewDidLoad</code> method. Recall that this is called by the View when it has been loaded from the Storyboard and is ready to be displayed to the user.</li>
+<li>After the call to the base implementation, assign a new <code>UISearchController</code> to your field.</li>
+</ol>
+<blockquote class="danger-quote"><strong>Important</strong> You need to use the constructor that takes a <code>searchResultsController</code>. The easiest way to do this (and get it right) is to use a parameter name assignment in the constructor as shown below. Do <strong>not</strong> use the default (empty) constructor as it will not create the view properly and you'll get an exception at runtime.
+</blockquote>
+<pre class="prettyprint"><code>searchController = new UISearchController(searchResultsController: null);
+</code></pre>
+
+<ol start="7">
+<li>
+Set the following properties on the <code>UISearchController</code>:
+<ul>
+<li>set <code>HidesNavigationBarDuringPresentation</code> to <code>false</code>.</li>
+<li>set <code>ObscuresBackgroundDuringPresentation</code> to <code>false</code>.</li>
+<li>set <code>SearchBar.Placeholder</code> to <code>&quot;Search Movies&quot;</code>.</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+Does the setting of <code>Placeholder</code> violate the Principle of Least Knowledge? Why not?
+</blockquote>
+<pre class="prettyprint-collapse"><code>searchController = new UISearchController(searchResultsController: null)
+{
+    HidesNavigationBarDuringPresentation = false,
+    ObscuresBackgroundDuringPresentation = false
+};
+
+searchController.SearchBar.Placeholder = &quot;Search Movies&quot;;
+</code></pre>
+
+<ol start="8">
+<li>Finally, assign the <code>UISearchBar</code> as the Table View's header view. You can get to the View for the Table View through the built-in <code>TableView</code> property (this is part of the <code>UITableViewController</code>).</li>
+</ol>
+<pre class="prettyprint"><code>TableView.TableHeaderView = searchController.SearchBar;
+</code></pre>
+
+<ol start="9">
+<li>If you run the application, you should see a search bar at the top of the view.</li>
+</ol>
+<figure class="figure">
+<img src="./images/searchbar.jpg" alt="SearchBar in your iOS App" />
+</figure>
+
+<hr>
+<h2>Retrieve a list of movies based on a search term</h2>
+<p>Next, use the <code>MovieService</code> to retrieve some movies and display them in the Table View through your Table View Controller.</p>
+<ol>
+<li>
+Add a new field to the <code>MovieTableViewController</code> of type <code>IReadOnlyList&lt;Movie&gt;</code> and name it <strong>movies</strong>.
+<ul>
+<li>You'll need to add a <code>using System.Collections.Generic</code> to use this collection type.</li>
+</ul>
+</li>
+<li>
+Add a new private method to the class named <code>UpdateMovieListings</code> which you'll use to update your movie list.
+<ul>
+<li>It should return a <code>System.Threading.Tasks.Task</code></li>
+<li>It should take a <code>string</code> parameter named <code>searchTerm</code></li>
+</ul>
+</li>
+<li>
+Have the method create a new <code>MovieService</code> object and use the <code>GetMoviesForSearchAsync</code> method to get a set of movies for the given search term.
+<ul>
+<li>Since this method returns a <code>Task</code>, use the <code>async</code> and <code>await</code> keywords to get the final result.</li>
+<li>Assign the results of the call to your <strong>movies</strong> field.</li>
+<li>If the search term is empty, there's no need to call the method since it won't return anything - just set the <strong>movies</strong> field to <code>null</code>.</li>
+</ul>
+</li>
+</ol>
+<pre class="prettyprint-collapse"><code>private async Task UpdateMovieListings(string searchTerm)
+{
+    if (!string.IsNullOrEmpty(searchTerm))
+    {
+        var movieService = new MovieService();
+        movies = await movieService.GetMoviesForSearchAsync(searchTerm);
+    }
+    else
+    {
+        movies = null;
+    }
+}
+</code></pre>
+
+<blockquote class="danger-quote"><strong>Note</strong> Sometimes Visual Studio will get confused with the use of <code>IReadOnlyList&lt;T&gt;</code> because you're using a .NET Standard library - it might underline the call to <code>GetMoviesForSearchAsync</code> in RED and indicate you need a reference to <code>System.Runtime</code> to use this type. This is an intellisense error, not a compile error - your app will build and run just fine and you can ignore Visual Studio in this case.
+</blockquote>
+
+<hr>
+<h2>Populate our Table View with Movies</h2>
+<p>The <code>UITableViewController</code> is designed to work with a <code>UITableView</code>. The Table View itself follows the <strong>Separation of Concerns</strong> principle by having its data be supplied by an external <em>Data Source</em> object. This can either be an independent class, or in the case of the <code>UITableViewController</code>, it can be provided through two virtual methods:</p>
+<table class="table table-striped">
+<thead>
+<tr>
+	<th>Method</th>
+	<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+	<td><code>RowsInSection</code></td>
+	<td>Returns the number of items to display.</td>
+</tr>
+<tr>
+	<td><code>GetCell</code></td>
+	<td>Returns the <code>View</code> to represent a single item.</td>
+</tr>
+</tbody>
+</table>
+<blockquote class="info-quote">Xamarin University has several classes which show you how to work with the <code>UITableView</code> class - make sure to check out <a href="https://university.xamarin.com/classes/track/xamarin-ios#ios110-tables-views-in-ios" target="_blank">IOS110 - Fundamentals of Table Views</a>, <a href="https://university.xamarin.com/classes/track/xamarin-ios#customizing-table-views-ios115" target="_blank">IOS115 - Customizing Table Views</a>, and <a href="https://university.xamarin.com/classes/track/xamarin-ios#ios215-editing-tableviews" target="_blank">IOS215 - Editing Table Views</a> classes to get all the details!
+</blockquote>
+<p>For simplicity, you'll use this latter approach to supply the data, but it's a good exercise to try separating out the data source on your own.</p>
+<ol>
+<li>Override the <code>RowsInSection</code> method and return the number of movies in your <strong>movies</strong> collection. Remember it could be <code>null</code> so either do a deliberate null-check, or use the null-coalescing operator to return zero.</li>
+</ol>
+<pre class="prettyprint-collapse"><code>public override nint RowsInSection(UITableView tableView, nint section)
+{
+    return movies?.Count ?? 0;
+}
+</code></pre>
+
+<ol start="2">
+<li>Table View cells are reused for performance, but you need a unique key to name the cell you design. Use the <strong>DRY</strong> principle and add an <code>NSString</code> field to your class named <strong>CellId</strong> with the value <code>&quot;MovieCell&quot;</code>.</li>
+</ol>
+<pre class="prettyprint-collapse"><code>private NSString CellId = new NSString(&quot;MovieCell&quot;);
+</code></pre>
+
+<ol start="3">
+<li>Override the <code>GetCell</code> method and use the following code to manage the creation and reuse of the view for a single movie:</li>
+</ol>
+<pre class="prettyprint"><code>public override UITableViewCell GetCell(UITableView tableView, NSIndexPath indexPath)
+{
+    var cell = tableView.DequeueReusableCell(CellId);
+    if (cell == null)
+    {
+        cell = new UITableViewCell(UITableViewCellStyle.Subtitle, CellId);
+    }
+
+    var movie = movies[indexPath.Row];
+    cell.TextLabel.Text = movie.Title;
+    cell.DetailTextLabel.Text = movie.Description;
+
+    return cell;
+}
+</code></pre>
+
+<ol start="4">
+<li>
+In your <code>UpdateMovieListings</code> method, at the very end after the <strong>movies</strong> field has been assigned, add a call to <code>TableView.ReloadData</code> to force the Table View to refresh its view of the collection.
+</li>
+<li>
+Finally, test this out by adding a call to <code>UpdateMovieListings</code> at the end of the <code>ViewDidLoad</code> method and pass in your favorite movie or search term. You will need to mark the method as <code>async</code> to <code>await</code> the <code>Task</code>.
+</li>
+</ol>
+<pre class="prettyprint"><code>await UpdateMovieListings(&quot;Star Wars&quot;);
+</code></pre>
+
+<ol start="6">
+<li>Run the app and see the results.</li>
+</ol>
+<figure class="figure">
+<img src="./images/list-of-movies.jpg" alt="We have movies!" />
+</figure>
+
+<hr>
+<h2>Add filtering to the movie list</h2>
+<ol>
+<li>
+<p>Have the Table View Controller implement the <code>IUISearchResultsUpdating</code> interface. This has a single method <code>UpdateSearchResultsForSearchController</code> which is called by the <code>SearchBar</code> when you type something into the field.</p>
+<ul>
+<li>Use the <em>Implement Interface</em> refactoring support built into Visual Studio to get the method signature - just right-click on the class/interface and to see the implement option.</li>
+<li>In the method, get the search term from the passed <code>searchController</code> parameter. You'll have to get the <code>Text</code> value from the child <code>SearchBar</code> property. In this case, it's allowed because you created the search controller and actually have it in an instance field.</li>
+</ul>
+</li>
+<li>
+Pass the retrieved search term to your <code>UpdateMovieListings</code> method and await the task.
+</li>
+<li>
+Finally, hook up the search implementation. You need to set the <code>SearchResultsUpdater</code> property on the <code>UISearchController</code> as part of the initial construction. Set the property to <code>this</code> to indicate that your Table View Controller implements the logic.
+</li>
+</ol>
+<pre class="prettyprint-collapse"><code>public partial class MovieTableViewController : UITableViewController, IUISearchResultsUpdating
+{
+   ...
+   public override void ViewDidLoad()
+   {
+      ...
+      searchController = new UISearchController(searchResultsController: null)
+      {
+         HidesNavigationBarDuringPresentation = false,
+         ObscuresBackgroundDuringPresentation = false,
+         SearchResultsUpdater = this,
+      };
+      ...
+   }
+
+   public async void UpdateSearchResultsForSearchController(UISearchController searchController)
+   {
+      var searchTerm = searchController.SearchBar.Text;
+      await UpdateMovieListings(searchTerm);
+   }
+}
+</code></pre>
+
+<ol start="4">
+<li>
+You can remove the initial test call to <code>UpdateMovieListings</code> in <code>ViewDidLoad</code> if you want, that way your table view starts out empty.
+</li>
+<li>
+Run the app and type in a search term. You should see it update as you type!
+</li>
+</ol>
+<figure class="figure">
+<img src="images/ex1-completed.png" alt="Final application running on iOS" />
+</figure>
+
+<hr>
+<h2>Exercise summary</h2>
+<p>In this exercise, you created a new Xamarin.iOS application using the Model-View-Controller architectural style.</p>
+<ul>
+<li>The <strong>Model</strong> was contained in the a separate assembly/layer.</li>
+<li>The <strong>View</strong> was created in a Storyboard.</li>
+<li>The <strong>Controller</strong> supplemented the View with a new SearchBar (showing we can add to the View from the Controller)</li>
+<li>The <strong>Controller</strong> then provided the connected between the retrieval of models (through the data layer) and presented them to the View in the form of rows in a Table View.</li>
+</ul>
+<p>You can view the completed solution in the <strong>Exercise 1</strong> &gt; <strong>Completed</strong> folder of your copy of the cloned or downloaded <a href="https://github.com/XamarinUniversity/XAM301/">course materials</a>.</p>
+
+
+        <div class="align-right">
+            <a href="../StartHere.html">Go Back</a>
+        </div>
+
+    </section>
+
+    <script src="./res/js/jquery.min.js"></script>
+    <script src="./res/js/jquery.imagemapster.min.js"></script>
+    <script src="./res/js/imagemap.js"></script>
+    <script src="./res/js/prettify.js"></script>
+    <script src="./res/js/script.js"></script>
+
+    <footer>Copyright (C) 2018 Xamarin Inc., Microsoft. All rights reserved.<br><a target="_blank" href="http://university.xamarin.com">Visit Xamarin University for more classes and content</a></footer>
+
+</body>
+</html>
